@@ -4,9 +4,7 @@ const DYNAMIC_CACHE = "dynamic_v1.0";
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/src/index.css",
-  "/src/App.jsx",
-  "/src/App.css",
+  "/manifest.json",
 ];
 
 // Guardar App Shell
