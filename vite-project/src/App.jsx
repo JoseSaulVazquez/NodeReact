@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { addData } from './db.js'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './style.css'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -11,8 +9,7 @@ function App() {
     const payload = { nombre: "JOSE", count };
 
     try {
-      // simula POST
-      let resp = await fetch("/api/save", {
+      const resp = await fetch("http://localhost:4000/api/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -25,34 +22,28 @@ function App() {
       console.log("Error en POST, guardando en IndexedDB...");
       await addData(payload);
 
-      // Avisar al SW que intente reintentar luego
       if ('serviceWorker' in navigator && 'SyncManager' in window) {
         const reg = await navigator.serviceWorker.ready;
         reg.sync.register("sync-posts");
+        console.log("Sincronización registrada (sync-posts)");
       }
     }
   };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+    <div className="container">
       <div className="card">
-        <button onClick={sendData}>
-          count is {count}
-        </button>
-        <p>
-          Si no hay conexión, guarda en IndexedDB y reintenta cuando vuelva.
-        </p>
+        <h1>Vite + React (PWA)</h1>
+        <p>Guarda y envía datos fácilmente incluso sin conexión.</p>
+        <div className="buttons">
+          <button className="send" onClick={sendData}>
+            Enviar (count = {count})
+          </button>
+          <button className="plus" onClick={() => setCount(count + 1)}>+1</button>
+        </div>
+        <small>Si no hay conexión, se guardará en IndexedDB y se enviará luego.</small>
       </div>
-    </>
+    </div>
   )
 }
 

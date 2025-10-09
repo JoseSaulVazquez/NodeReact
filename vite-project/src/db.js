@@ -3,7 +3,7 @@ export function openDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open("database", 1);
     request.onupgradeneeded = (event) => {
-      let db = event.target.result;
+      const db = event.target.result;
       if (!db.objectStoreNames.contains("table")) {
         db.createObjectStore("table", { autoIncrement: true });
       }
@@ -13,38 +13,11 @@ export function openDB() {
   });
 }
 
-export function addData(data) {
-  return openDB().then((db) => {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction("table", "readwrite");
-      const store = tx.objectStore("table");
-      const req = store.add(data);
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-  });
-}
-
-export function getAllData() {
-  return openDB().then((db) => {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction("table", "readonly");
-      const store = tx.objectStore("table");
-      const req = store.getAll();
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-  });
-}
-
-export function clearData() {
-  return openDB().then((db) => {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction("table", "readwrite");
-      const store = tx.objectStore("table");
-      const req = store.clear();
-      req.onsuccess = () => resolve(true);
-      req.onerror = () => reject(req.error);
-    });
-  });
+export async function addData(data) {
+  const db = await openDB();
+  const tx = db.transaction("table", "readwrite");
+  const store = tx.objectStore("table");
+  store.add(data);
+  console.log("Guardado en IndexedDB:", data);
+  return tx.complete;
 }
