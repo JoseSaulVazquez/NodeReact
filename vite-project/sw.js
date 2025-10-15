@@ -112,3 +112,19 @@ async function sendSavedPosts() {
     }
   };
 }
+
+// ------------------ PUSH NOTIFICATIONS ------------------
+self.addEventListener("push", (event) => {
+  console.log("[SW] Push recibido:", event);
+
+  const data = event.data ? event.data.json() : {};
+  const title = data.title || "Notificación PWA";
+  const options = {
+    body: data.body || "Hola, dame de comer w.",
+    icon: "/public/icons/icon-512x512.png",
+    badge: "/public/icons/icon-192x192.png",
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+

@@ -11,6 +11,8 @@ db.onupgradeneeded=event=>{
   result.createObjectStore('table',{autoIncrement:true});
 }
 
+
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
