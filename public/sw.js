@@ -119,12 +119,37 @@ self.addEventListener("push", (event) => {
 
   const data = event.data ? event.data.json() : {};
   const title = data.title || "Notificación PWA";
+
+  // Si viene un luchador en la notificación, personalizamos
   const options = {
-    body: data.body || "Hola, dame de comer w.",
+    body: data.body || "Nueva actualización disponible.",
     icon: "/icons/icon-512x512.png",
     badge: "/icons/icon-192x192.png",
+    data: {
+      url: data.url || "/", // Enlace al que redirigir al hacer click
+      luchador: data.luchador || null,
+    },
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
+// ------------------ CLICK EN NOTIFICACIÓN ------------------
+self.addEventListener("notificationclick", (event) => {
+  console.log("[SW] Click en notificación:", event.notification);
+  event.notification.close();
+
+  const url = event.notification.data?.url || "/";
+
+  // Intentar abrir o enfocar la ventana de la PWA
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(url) && "focus" in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) return clients.openWindow(url);
+    })
+  );
+});

@@ -1,27 +1,37 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './index.css';
+import App from './App.jsx';
+import FighterPage from './pages/FightersPage';
 
-// Registrar SW solo si es compatible y está servido desde origen correcto
+// Registrar Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
-      .then(() => console.log('Service Worker registrado correctamente'))
-      .catch(err => console.error('Error registrando el SW:', err))
-  })
+      .then(() => console.log('✅ Service Worker registrado correctamente'))
+      .catch(err => console.error('❌ Error registrando el SW:', err));
+  });
 }
 
 // IndexedDB inicial
-let db = window.indexedDB.open('database')
+let db = window.indexedDB.open('database');
 db.onupgradeneeded = event => {
-  let result = event.target.result
-  result.createObjectStore('table', { autoIncrement: true })
-}
+  let result = event.target.result;
+  if (!result.objectStoreNames.contains('table')) {
+    result.createObjectStore('table', { autoIncrement: true });
+  }
+};
 
+// Renderizado principal con rutas
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/fighter/:slug" element={<FighterPage />} />
+      </Routes>
+    </BrowserRouter>
+  </StrictMode>
+);

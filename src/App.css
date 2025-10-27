@@ -1,109 +1,59 @@
-/* Reset básico */
-* {
-  box-sizing: border-box;
+body {
+  background: radial-gradient(circle at top, #111 0%, #000 100%);
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* Fondo general */
-body {
-  background-color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Contenedor principal */
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
-}
-
-/* Tarjeta */
-.card {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.gallery-container {
   text-align: center;
+  padding: 30px;
+}
+
+.title {
+  color: #e50914;
+  font-size: 3rem;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.6);
+  margin-bottom: 40px;
+}
+
+.grid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  justify-items: center;
+}
+
+.card {
+  background: linear-gradient(145deg, #1a1a1a, #111);
+  border: 2px solid #e50914;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(229, 9, 20, 0.8);
+}
+
+.wrestler-img {
   width: 100%;
-  max-width: 360px; /* límite para pantallas grandes */
+  height: 260px;
+  object-fit: contain;
+  background: #000;
 }
 
-/* Título */
-.card h1 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-/* Botones */
-.buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 1.5rem 0;
-  flex-wrap: wrap; /* permite que los botones bajen en pantallas pequeñas */
-}
-
-button {
-  padding: 0.8rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s;
-  width: 100%;
-  max-width: 140px; /* no se alargan mucho */
-}
-
-/* Botón enviar */
-button.send {
-  background-color: #007bff;
+.wrestler-name {
+  background-color: #e50914;
   color: white;
-}
-button.send:hover {
-  background-color: #0056b3;
-}
-
-/* Botón +1 */
-button.plus {
-  background-color: #28a745;
-  color: white;
-}
-button.plus:hover {
-  background-color: #1e7e34;
-}
-
-/* Texto pequeño */
-small {
-  color: #666;
-  font-size: 0.85rem;
-  display: block;
-}
-
-/* 📱 Responsividad */
-@media (max-width: 480px) {
-  .card {
-    padding: 1.5rem;
-    width: 90%;
-  }
-
-  .card h1 {
-    font-size: 1.3rem;
-  }
-
-  button {
-    font-size: 0.9rem;
-    max-width: 120px;
-  }
-
-  small {
-    font-size: 0.8rem;
-  }
+  margin: 0;
+  padding: 10px 0;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-top: 1px solid #fff;
 }
