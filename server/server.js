@@ -8,21 +8,22 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
-// CLAVES VAPID 
-
-const publicVapidKey = "BIFfnwJktLiHzU4hsToHUkjNoPia0L4XuEcIyt3m3PeTHxo9oCSKdgNSWeIP2RS37p5ulxnP0Twzt86hLt8PQuQ";
+// ==========================
+// CLAVES VAPID
+// ==========================
+const publicVapidKey =
+  "BIFfnwJktLiHzU4hsToHUkjNoPia0L4XuEcIyt3m3PeTHxo9oCSKdgNSWeIP2RS37p5ulxnP0Twzt86hLt8PQuQ";
 const privateVapidKey = "VYccipkuFENALikvb_Eb0Hs9dxKkEDFQxBpyXDtgq5w";
 
 webpush.setVapidDetails(
-  "mailto:saulv4583@gmail.com", 
+  "mailto:saulv4583@gmail.com",
   publicVapidKey,
   privateVapidKey
 );
 
-
-// Conexión con MongoDB Atlas
-
+// ==========================
+// CONEXIÓN A MONGO
+// ==========================
 mongoose
   .connect(
     "mongodb+srv://Saul_ioT:1234@cluster0.fo4lgsw.mongodb.net/pwaDB?retryWrites=true&w=majority&appName=Cluster0",
@@ -31,9 +32,9 @@ mongoose
   .then(() => console.log("Conectado a MongoDB"))
   .catch((err) => console.error("Error al conectar MongoDB:", err));
 
-
-// Esquemas y modelos
-
+// ==========================
+// MODELOS
+// ==========================
 const RegistroSchema = new mongoose.Schema({
   nombre: String,
   fecha: { type: Date, default: Date.now },
@@ -42,14 +43,15 @@ const RegistroSchema = new mongoose.Schema({
 const SubscriptionSchema = new mongoose.Schema({
   endpoint: String,
   keys: Object,
+  luchador: String, // <-- nuevo campo opcional para personalizar las notificaciones
 });
 
 const Registro = mongoose.model("Registro", RegistroSchema);
 const Subscription = mongoose.model("Subscription", SubscriptionSchema);
 
-
-// Endpoint para guardar datos
-
+// ==========================
+// ENDPOINT: guardar datos normales
+// ==========================
 app.post("/api/save", async (req, res) => {
   const { nombre } = req.body;
   const nuevo = new Registro({ nombre });
@@ -58,24 +60,26 @@ app.post("/api/save", async (req, res) => {
   res.status(201).json({ message: "Guardado correctamente", data: nuevo });
 });
 
-
-// Guardar suscripción push
-
+// ==========================
+// ENDPOINT: guardar suscripción push
+// ==========================
 app.post("/api/subscribe", async (req, res) => {
-  const subscription = req.body;
+  const { subscription, luchador } = req.body; // <-- el cliente puede mandar un luchador
+  if (!subscription) return res.status(400).json({ message: "Falta suscripción" });
 
   await Subscription.findOneAndUpdate(
     { endpoint: subscription.endpoint },
-    subscription,
+    { ...subscription, luchador: luchador || null },
     { upsert: true }
   );
 
+  console.log("Suscripción guardada:", luchador || "general");
   res.status(201).json({ message: "Suscripción guardada correctamente." });
 });
 
-
-// Enviar notificación push
-
+// ==========================
+// ENDPOINT: enviar push general
+// ==========================
 app.post("/api/send-push", async (req, res) => {
   const { title, body } = req.body;
 
@@ -93,8 +97,38 @@ app.post("/api/send-push", async (req, res) => {
   res.json({ message: "Notificaciones enviadas" });
 });
 
+// ==========================
+// ENDPOINT: enviar push personalizado
+// ==========================
+// Ejemplo: POST /api/send-push/CM%20Punk
+app.post("/api/send-push/:luchador", async (req, res) => {
+  const { luchador } = req.params;
+  const { title, body } = req.body;
 
-// Iniciar servidor
+  const subs = await Subscription.find({ luchador });
+  if (!subs.length)
+    return res.status(404).json({ message: `No hay suscripciones para ${luchador}` });
 
+  const payload = JSON.stringify({
+    title: title || `${luchador} News`,
+    body: body || `Nuevas noticias de ${luchador}`,
+  });
+
+  for (let sub of subs) {
+    try {
+      await webpush.sendNotification(sub, payload);
+    } catch (err) {
+      console.error(`Error al enviar push a ${luchador}:`, err);
+    }
+  }
+
+  res.json({ message: `Notificaciones enviadas a fans de ${luchador}` });
+});
+
+// ==========================
+// SERVIDOR
+// ==========================
 const PORT = 4000;
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Servidor corriendo en http://localhost:${PORT}`)
+);
