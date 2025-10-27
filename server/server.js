@@ -100,6 +100,7 @@ app.post("/api/send-push", async (req, res) => {
 // ==========================
 // ENDPOINT: enviar push personalizado
 // ==========================
+
 // Ejemplo: POST /api/send-push/CM%20Punk
 app.post("/api/send-push/:luchador", async (req, res) => {
   const { luchador } = req.params;
