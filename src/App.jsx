@@ -5,7 +5,7 @@ import "./App.css";
 export default function App() {
   return (
     <div className="gallery-container">
-      <h1 className="title">🔥 WWE Gallery 🔥</h1>
+      <h1 className="title">WWE WIKI</h1>
       <div className="grid-gallery">
         {fighters.map((w) => (
           <div key={w.id} className="card">

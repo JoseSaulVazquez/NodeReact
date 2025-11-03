@@ -65,3 +65,39 @@
 .subscribe-btn:hover {
   background: #ff2d2d;
 }
+
+.fighter-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.fighter-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  margin: auto;
+  color: white;
+}
+
+/* PANEL DERECHA - SOLO PARA PC */
+.fighter-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 65.3%;
+  height: 107%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.19; 
+  pointer-events: none; /* Evita que bloquee clics */
+  display: none;
+}
+
+
+/* En pantallas grandes se activa */
+@media (min-width: 900px) {
+  .fighter-bg {
+    display: block;
+  }
+}

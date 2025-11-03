@@ -3,6 +3,7 @@ const fighters = [
     id: "cm-punk",
     name: "CM Punk",
     image: "/icons/fighters/cm-punk.png",
+    image2: "/icons/fighters/logoPunk.jpg",
     bio: "CM Punk (Phil Brooks) es un luchador estadounidense nacido el 26 de octubre de 1978 en Chicago. Conocido por su estilo de lucha y su filosofía de vida Straight Edge (no consumir alcohol, drogas ni tabaco), Punk se destacó en el circuito independiente antes de unirse a la WWE en 2005.",
     achievements: [
       "2× WWE Champion",
@@ -17,6 +18,7 @@ const fighters = [
     id: "john-cena",
     name: "John Cena",
     image: "/icons/fighters/john-cena.png",
+    image2: "/icons/fighters/logoCena.jpg",
     bio: "John Felix Anthony Cena, conocido como John Cena, es un luchador profesional nacido en Massachusetts el 23 de abril de 1977. Conocido por su carrera en la WWE, donde ostenta 17 campeonatos mundiales",
     achievements: [
       "14× WWE Champion",
@@ -32,6 +34,7 @@ const fighters = [
     id: "undertaker",
     name: "Undertaker",
     image: "/icons/fighters/undertaker.png",
+    image2: "/icons/fighters/logoUnder.jpg",
     bio: "Mark William Calaway (Houston, 24 de marzo de 1965), conocido como The Undertaker, es un exluchador profesional estadounidense retirado que trabaja como embajador para la WWE.",
     achievements: [
       "4× WWE/WWF Championship",
@@ -47,6 +50,7 @@ const fighters = [
     id: "edge",
     name: "Edge",
     image: "/icons/fighters/edge.png",
+    image2: "/icons/fighters/logoEdgee.jpg",
     bio: "Adam Joseph Copeland, conocido como Edge, es un luchador profesional nacido el 30 de octubre de 1973. Famoso por su carrera en la WWE",
     achievements: [
       "4× WWE Champion",
@@ -64,6 +68,7 @@ const fighters = [
     id: "jeff-hardy",
     name: "Jeff Hardy",
     image: "/icons/fighters/jeff-hardy.png",
+    image2: "/icons/fighters/logoJeff.jpg",
     bio: "Jeffrey Nero Hardy, conocido como Jeff Hardy, es un luchador profesional estadounidense, conocido por su carrera en la WWE y otras empresas como TNA y AEW. Nacido el 31 de agosto de 1977, es famoso por formar el icónico equipo de The Hardy Boyz junto a su hermano Matt",
     achievements: [
       "1× WWE Champion",
@@ -81,6 +86,7 @@ const fighters = [
     id: "randy-orton",
     name: "Randy Orton",
     image: "/icons/fighters/randy-orton.png",
+    image2: "/icons/fighters/logoRandy.jpg",
     bio: "Randall Keith Orton,conocido como Randy Orton, es un luchador profesional estadounidense, nacido el 1 de abril de 1980 en Knoxville, Tennessee. Proveniente de una familia de luchadores, se unió a la WWE en 2002 y se convirtió en una estrella de la lucha libre, conocido por sus personajes de The Viper (La Víbora) y The Legend Killer (El Asesino de Leyendas).",
     achievements: [
       "10× WWE Champion",
