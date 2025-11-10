@@ -43,7 +43,7 @@ const RegistroSchema = new mongoose.Schema({
 const SubscriptionSchema = new mongoose.Schema({
   endpoint: String,
   keys: Object,
-  luchador: String, // <-- nuevo campo opcional para personalizar las notificaciones
+  luchador: String,
 });
 
 const Registro = mongoose.model("Registro", RegistroSchema);
@@ -63,7 +63,7 @@ app.post("/api/save", async (req, res) => {
 // ENDPOINT: guardar suscripción push
 
 app.post("/api/subscribe", async (req, res) => {
-  const { subscription, luchador } = req.body; // <-- el cliente puede mandar un luchador
+  const { subscription, luchador } = req.body; 
   if (!subscription) return res.status(400).json({ message: "Falta suscripción" });
 
   await Subscription.findOneAndUpdate(
