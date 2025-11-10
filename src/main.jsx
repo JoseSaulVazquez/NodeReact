@@ -3,15 +3,17 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App.jsx';
-import FighterPage from './pages/FightersPage';
+import FighterPage from './pages/FightersPage.jsx';
+import AdminPage from './pages/AdminPage.jsx'; 
+import FavoritesPage from './pages/FavoritesPage';
 
 // Registrar Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js')
-      .then(() => console.log('✅ Service Worker registrado correctamente'))
-      .catch(err => console.error('❌ Error registrando el SW:', err));
+      .then(() => console.log('Service Worker registrado correctamente'))
+      .catch(err => console.error('Error registrando el SW:', err));
   });
 }
 
@@ -31,6 +33,8 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/fighter/:slug" element={<FighterPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

@@ -13,6 +13,7 @@ export default function App() {
               <img src={w.image} alt={w.name} className="wrestler-img" />
               <h3 className="wrestler-name">{w.name}</h3>
             </Link>
+            <Link to="/favorites" className="fav-link">⭐ Ver mis favoritos</Link>
           </div>
         ))}
       </div>

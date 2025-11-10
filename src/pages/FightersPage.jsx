@@ -10,26 +10,43 @@ export default function FighterPage() {
 
  // INDEXEDDB FAVORITOS
 const saveFavorite = () => {
-  const request = indexedDB.open("database", 1);
+  const request = indexedDB.open("database", 2);
 
-  request.onupgradeneeded = () => {
-    const db = request.result;
+  request.onupgradeneeded = (event) => {
+    const db = event.target.result;
+  
     if (!db.objectStoreNames.contains("favorites")) {
       db.createObjectStore("favorites", { keyPath: "id" });
+      console.log("Object store 'favorites' creado ✅");
     }
   };
 
-  request.onsuccess = () => {
-    const db = request.result;
+  request.onsuccess = (event) => {
+    const db = event.target.result;
+    if (!db.objectStoreNames.contains("favorites")) {
+      alert("❌ Error: la base de datos no tiene el store 'favorites'");
+      return;
+    }
+
     const tx = db.transaction("favorites", "readwrite");
     const store = tx.objectStore("favorites");
+
     store.put({ id: fighter.id, name: fighter.name });
 
     tx.oncomplete = () => {
       alert(`⭐ ${fighter.name} agregado a favoritos`);
     };
+
+    tx.onerror = (e) => {
+      console.error("Error en la transacción IndexedDB:", e);
+    };
+  };
+
+  request.onerror = (e) => {
+    console.error("Error al abrir IndexedDB:", e);
   };
 };
+
 
 
   // SUSCRIBIRSE A PUSH
@@ -41,7 +58,7 @@ const saveFavorite = () => {
       applicationServerKey: "BIFfnwJktLiHzU4hsToHUkjNoPia0L4XuEcIyt3m3PeTHxo9oCSKdgNSWeIP2RS37p5ulxnP0Twzt86hLt8PQuQ"
     });
 
-    await fetch("http://localhost:4000/api/subscribe", {
+    await fetch("http://192.168.0.13:4000/api/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ subscription, luchador: fighter.name }),
@@ -56,7 +73,7 @@ const saveFavorite = () => {
     const sub = await sw.pushManager.getSubscription();
     if (!sub) return alert("No estás suscrito");
 
-    await fetch("http://localhost:4000/api/unsubscribe", {
+    await fetch("http://192.168.0.13:4000/api/unsubscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ endpoint: sub.endpoint }),
@@ -84,9 +101,18 @@ const saveFavorite = () => {
       ))}
     </ul>
 
-    <button className="subscribe-btn">🔔 Suscribirme a {fighter.name}</button>
-    <button className="unsubscribe-btn">🔕 Cancelar suscripción</button>
-    <button className="fav-btn">⭐ Agregar a favoritos</button>
+<button className="subscribe-btn" onClick={subscribeToFighter}>
+  🔔 Suscribirme a {fighter.name}
+</button>
+
+<button className="unsubscribe-btn" onClick={unsubscribe}>
+  🔕 Cancelar suscripción
+</button>
+
+<button className="fav-btn" onClick={saveFavorite}>
+  ⭐ Agregar a favoritos
+</button>
+
   </div>
 
   {/* Fondo */}
